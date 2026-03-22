@@ -1,0 +1,11 @@
+{
+  "seq_len": 16,
+  "feat_dim": 252,
+  "num_classes": 184,
+  "landmark_layout": "color_left_hand(63)+color_right_hand(63)+depth_left_hand(63)+depth_right_hand(63)",
+  "model_file": "model.keras",
+  "norm_stats_file": "norm_stats.json",
+  "label_map_file": "label_map.json",
+  "confidence_threshold": 0.4,
+  "top_k_display": 3
+}
