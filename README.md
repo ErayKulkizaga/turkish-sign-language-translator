@@ -141,7 +141,7 @@ pip install fastapi uvicorn tensorflow mediapipe opencv-python numpy pandas
 The trained model (`model.keras`) is not included in this repository due to file size.  
 Download it from Google Drive and place it in `model_assets/`.
 
-> Link: *(add your Google Drive link here)*
+> [Download model.keras from Google Drive](https://drive.google.com/file/d/1nSiWfa8YZYXqZeG2xm_YOfqBefw6IuVZ/view?usp=sharing)
 
 ### 2. (Optional) Re-extract landmarks
 
