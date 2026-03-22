@@ -244,11 +244,26 @@ Output: `dataset/landmarks/` — one JSON file per word, 30 frames each, contain
 
 ### 3. Run the demo
 
+**Option A — Direct**
 ```bash
 python backend.py
 ```
 
+**Option B — Docker**
+```bash
+# Build and start
+docker-compose up --build
+
+# Run in background
+docker-compose up -d --build
+
+# Stop
+docker-compose down
+```
+
 Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+> **Note:** `model.keras` and `dataset/landmarks/` are mounted as volumes — you do not need to rebuild the image when updating the model.
 
 ---
 
