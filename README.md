@@ -292,7 +292,7 @@ Open [http://localhost:8000](http://localhost:8000) in your browser.
 | Landmark extraction (live) | MediaPipe Holistic (WASM, browser-side) |
 | 3D Animation | Three.js (stick figure renderer) |
 | Real-time communication | WebSocket |
-| Training environment | Google Colab (GPU) |
+| Training environment | Google Colab (T4 GPU) |
 
 ---
 
