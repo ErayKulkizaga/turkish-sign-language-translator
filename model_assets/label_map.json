@@ -1,0 +1,922 @@
+{
+  "0": {
+    "original_class_id": 0,
+    "TR": "abla",
+    "EN": "sister"
+  },
+  "1": {
+    "original_class_id": 1,
+    "TR": "acele",
+    "EN": "hurry"
+  },
+  "2": {
+    "original_class_id": 2,
+    "TR": "acikmak",
+    "EN": "hungry"
+  },
+  "3": {
+    "original_class_id": 3,
+    "TR": "afiyet_olsun",
+    "EN": "enjoy_your_meal"
+  },
+  "4": {
+    "original_class_id": 4,
+    "TR": "agabey",
+    "EN": "brother"
+  },
+  "5": {
+    "original_class_id": 5,
+    "TR": "agac",
+    "EN": "tree"
+  },
+  "6": {
+    "original_class_id": 8,
+    "TR": "aile",
+    "EN": "family"
+  },
+  "7": {
+    "original_class_id": 10,
+    "TR": "akilsiz",
+    "EN": "unwise"
+  },
+  "8": {
+    "original_class_id": 11,
+    "TR": "akraba",
+    "EN": "kin"
+  },
+  "9": {
+    "original_class_id": 12,
+    "TR": "alisveris",
+    "EN": "shopping"
+  },
+  "10": {
+    "original_class_id": 13,
+    "TR": "anahtar",
+    "EN": "key"
+  },
+  "11": {
+    "original_class_id": 14,
+    "TR": "anne",
+    "EN": "mother"
+  },
+  "12": {
+    "original_class_id": 15,
+    "TR": "arkadas",
+    "EN": "friend"
+  },
+  "13": {
+    "original_class_id": 17,
+    "TR": "ayakkabi",
+    "EN": "shoe"
+  },
+  "14": {
+    "original_class_id": 18,
+    "TR": "ayna",
+    "EN": "mirror"
+  },
+  "15": {
+    "original_class_id": 19,
+    "TR": "ayni",
+    "EN": "same"
+  },
+  "16": {
+    "original_class_id": 20,
+    "TR": "baba",
+    "EN": "father"
+  },
+  "17": {
+    "original_class_id": 21,
+    "TR": "bahce",
+    "EN": "garden"
+  },
+  "18": {
+    "original_class_id": 23,
+    "TR": "bal",
+    "EN": "honey"
+  },
+  "19": {
+    "original_class_id": 24,
+    "TR": "bardak",
+    "EN": "glass"
+  },
+  "20": {
+    "original_class_id": 25,
+    "TR": "bayrak",
+    "EN": "flag"
+  },
+  "21": {
+    "original_class_id": 26,
+    "TR": "bayram",
+    "EN": "feast"
+  },
+  "22": {
+    "original_class_id": 27,
+    "TR": "bebek",
+    "EN": "baby"
+  },
+  "23": {
+    "original_class_id": 28,
+    "TR": "bekar",
+    "EN": "single"
+  },
+  "24": {
+    "original_class_id": 29,
+    "TR": "beklemek",
+    "EN": "wait"
+  },
+  "25": {
+    "original_class_id": 30,
+    "TR": "ben",
+    "EN": "I"
+  },
+  "26": {
+    "original_class_id": 31,
+    "TR": "benzin",
+    "EN": "petrol"
+  },
+  "27": {
+    "original_class_id": 32,
+    "TR": "beraber",
+    "EN": "together"
+  },
+  "28": {
+    "original_class_id": 33,
+    "TR": "bilgi_vermek",
+    "EN": "inform"
+  },
+  "29": {
+    "original_class_id": 34,
+    "TR": "biz",
+    "EN": "we"
+  },
+  "30": {
+    "original_class_id": 35,
+    "TR": "calismak",
+    "EN": "work"
+  },
+  "31": {
+    "original_class_id": 37,
+    "TR": "catal",
+    "EN": "fork"
+  },
+  "32": {
+    "original_class_id": 38,
+    "TR": "cay",
+    "EN": "tea"
+  },
+  "33": {
+    "original_class_id": 39,
+    "TR": "caydanlik",
+    "EN": "teapot"
+  },
+  "34": {
+    "original_class_id": 40,
+    "TR": "cekic",
+    "EN": "hammer"
+  },
+  "35": {
+    "original_class_id": 41,
+    "TR": "cirkin",
+    "EN": "ugly"
+  },
+  "36": {
+    "original_class_id": 42,
+    "TR": "cocuk",
+    "EN": "child"
+  },
+  "37": {
+    "original_class_id": 43,
+    "TR": "corba",
+    "EN": "soup"
+  },
+  "38": {
+    "original_class_id": 44,
+    "TR": "cuma",
+    "EN": "friday"
+  },
+  "39": {
+    "original_class_id": 45,
+    "TR": "cumartesi",
+    "EN": "saturday"
+  },
+  "40": {
+    "original_class_id": 46,
+    "TR": "cuzdan",
+    "EN": "wallet"
+  },
+  "41": {
+    "original_class_id": 48,
+    "TR": "dede",
+    "EN": "grandfather"
+  },
+  "42": {
+    "original_class_id": 49,
+    "TR": "degistirmek",
+    "EN": "change"
+  },
+  "43": {
+    "original_class_id": 50,
+    "TR": "devirmek",
+    "EN": "topple"
+  },
+  "44": {
+    "original_class_id": 51,
+    "TR": "devlet",
+    "EN": "government"
+  },
+  "45": {
+    "original_class_id": 52,
+    "TR": "doktor",
+    "EN": "doctor"
+  },
+  "46": {
+    "original_class_id": 54,
+    "TR": "dugun",
+    "EN": "wedding"
+  },
+  "47": {
+    "original_class_id": 55,
+    "TR": "dun",
+    "EN": "yesterday"
+  },
+  "48": {
+    "original_class_id": 56,
+    "TR": "dusman",
+    "EN": "enemy"
+  },
+  "49": {
+    "original_class_id": 57,
+    "TR": "duvar",
+    "EN": "wall"
+  },
+  "50": {
+    "original_class_id": 58,
+    "TR": "eczane",
+    "EN": "pharmacy"
+  },
+  "51": {
+    "original_class_id": 59,
+    "TR": "eldiven",
+    "EN": "glove"
+  },
+  "52": {
+    "original_class_id": 60,
+    "TR": "emek",
+    "EN": "labor"
+  },
+  "53": {
+    "original_class_id": 61,
+    "TR": "emekli",
+    "EN": "retired"
+  },
+  "54": {
+    "original_class_id": 63,
+    "TR": "et",
+    "EN": "meal"
+  },
+  "55": {
+    "original_class_id": 64,
+    "TR": "ev",
+    "EN": "house"
+  },
+  "56": {
+    "original_class_id": 66,
+    "TR": "evli",
+    "EN": "married"
+  },
+  "57": {
+    "original_class_id": 68,
+    "TR": "fil",
+    "EN": "elephant"
+  },
+  "58": {
+    "original_class_id": 69,
+    "TR": "fotograf",
+    "EN": "photograph"
+  },
+  "59": {
+    "original_class_id": 70,
+    "TR": "futbol",
+    "EN": "football"
+  },
+  "60": {
+    "original_class_id": 71,
+    "TR": "gecmis",
+    "EN": "past"
+  },
+  "61": {
+    "original_class_id": 72,
+    "TR": "gecmis_olsun",
+    "EN": "get_well"
+  },
+  "62": {
+    "original_class_id": 73,
+    "TR": "getirmek",
+    "EN": "bring"
+  },
+  "63": {
+    "original_class_id": 74,
+    "TR": "gol",
+    "EN": "lake"
+  },
+  "64": {
+    "original_class_id": 75,
+    "TR": "gomlek",
+    "EN": "shirt"
+  },
+  "65": {
+    "original_class_id": 76,
+    "TR": "gormek",
+    "EN": "see"
+  },
+  "66": {
+    "original_class_id": 77,
+    "TR": "gostermek",
+    "EN": "show"
+  },
+  "67": {
+    "original_class_id": 78,
+    "TR": "gulmek",
+    "EN": "laugh"
+  },
+  "68": {
+    "original_class_id": 79,
+    "TR": "hafif",
+    "EN": "lightweight"
+  },
+  "69": {
+    "original_class_id": 80,
+    "TR": "hakli",
+    "EN": "right"
+  },
+  "70": {
+    "original_class_id": 81,
+    "TR": "hali",
+    "EN": "carpet"
+  },
+  "71": {
+    "original_class_id": 83,
+    "TR": "hastane",
+    "EN": "hospital"
+  },
+  "72": {
+    "original_class_id": 85,
+    "TR": "havlu",
+    "EN": "towel"
+  },
+  "73": {
+    "original_class_id": 86,
+    "TR": "hayir",
+    "EN": "no"
+  },
+  "74": {
+    "original_class_id": 87,
+    "TR": "hayirli_olsun",
+    "EN": "congratulations"
+  },
+  "75": {
+    "original_class_id": 88,
+    "TR": "hayvan",
+    "EN": "animal"
+  },
+  "76": {
+    "original_class_id": 90,
+    "TR": "helal",
+    "EN": "halal"
+  },
+  "77": {
+    "original_class_id": 91,
+    "TR": "hep",
+    "EN": "always"
+  },
+  "78": {
+    "original_class_id": 92,
+    "TR": "hic",
+    "EN": "never"
+  },
+  "79": {
+    "original_class_id": 93,
+    "TR": "hoscakal",
+    "EN": "goodbye"
+  },
+  "80": {
+    "original_class_id": 94,
+    "TR": "icmek",
+    "EN": "drink"
+  },
+  "81": {
+    "original_class_id": 97,
+    "TR": "ilgilenmemek",
+    "EN": "not_interested"
+  },
+  "82": {
+    "original_class_id": 99,
+    "TR": "itmek",
+    "EN": "push"
+  },
+  "83": {
+    "original_class_id": 100,
+    "TR": "iyi",
+    "EN": "good"
+  },
+  "84": {
+    "original_class_id": 101,
+    "TR": "kacmak",
+    "EN": "escape"
+  },
+  "85": {
+    "original_class_id": 102,
+    "TR": "kahvalti",
+    "EN": "breakfast"
+  },
+  "86": {
+    "original_class_id": 103,
+    "TR": "kalem",
+    "EN": "pencil"
+  },
+  "87": {
+    "original_class_id": 105,
+    "TR": "kapi",
+    "EN": "door"
+  },
+  "88": {
+    "original_class_id": 106,
+    "TR": "kardes",
+    "EN": "sibling"
+  },
+  "89": {
+    "original_class_id": 107,
+    "TR": "kavsak",
+    "EN": "crossroads"
+  },
+  "90": {
+    "original_class_id": 108,
+    "TR": "kaza",
+    "EN": "accident"
+  },
+  "91": {
+    "original_class_id": 109,
+    "TR": "kemer",
+    "EN": "belt"
+  },
+  "92": {
+    "original_class_id": 111,
+    "TR": "kim",
+    "EN": "who"
+  },
+  "93": {
+    "original_class_id": 112,
+    "TR": "kimlik",
+    "EN": "identity"
+  },
+  "94": {
+    "original_class_id": 113,
+    "TR": "kira",
+    "EN": "rent"
+  },
+  "95": {
+    "original_class_id": 114,
+    "TR": "kitap",
+    "EN": "book"
+  },
+  "96": {
+    "original_class_id": 115,
+    "TR": "kiyma",
+    "EN": "mince"
+  },
+  "97": {
+    "original_class_id": 117,
+    "TR": "koku",
+    "EN": "smell"
+  },
+  "98": {
+    "original_class_id": 118,
+    "TR": "kolonya",
+    "EN": "cologne"
+  },
+  "99": {
+    "original_class_id": 119,
+    "TR": "komur",
+    "EN": "coal"
+  },
+  "100": {
+    "original_class_id": 120,
+    "TR": "kopek",
+    "EN": "dog"
+  },
+  "101": {
+    "original_class_id": 121,
+    "TR": "kopru",
+    "EN": "bridge"
+  },
+  "102": {
+    "original_class_id": 123,
+    "TR": "kucak",
+    "EN": "lap"
+  },
+  "103": {
+    "original_class_id": 124,
+    "TR": "leke",
+    "EN": "stain"
+  },
+  "104": {
+    "original_class_id": 128,
+    "TR": "masallah",
+    "EN": "god_preserve"
+  },
+  "105": {
+    "original_class_id": 130,
+    "TR": "memnun_olmak",
+    "EN": "be_pleased"
+  },
+  "106": {
+    "original_class_id": 132,
+    "TR": "merdiven",
+    "EN": "stairs"
+  },
+  "107": {
+    "original_class_id": 134,
+    "TR": "mudur",
+    "EN": "manager"
+  },
+  "108": {
+    "original_class_id": 136,
+    "TR": "nasil",
+    "EN": "how"
+  },
+  "109": {
+    "original_class_id": 137,
+    "TR": "neden",
+    "EN": "why"
+  },
+  "110": {
+    "original_class_id": 138,
+    "TR": "nerede",
+    "EN": "where"
+  },
+  "111": {
+    "original_class_id": 140,
+    "TR": "ocak",
+    "EN": "oven"
+  },
+  "112": {
+    "original_class_id": 141,
+    "TR": "oda",
+    "EN": "room"
+  },
+  "113": {
+    "original_class_id": 143,
+    "TR": "ogretmen",
+    "EN": "teacher"
+  },
+  "114": {
+    "original_class_id": 144,
+    "TR": "okul",
+    "EN": "school"
+  },
+  "115": {
+    "original_class_id": 145,
+    "TR": "olimpiyat",
+    "EN": "olympiad"
+  },
+  "116": {
+    "original_class_id": 146,
+    "TR": "olmaz",
+    "EN": "nope"
+  },
+  "117": {
+    "original_class_id": 147,
+    "TR": "olur",
+    "EN": "allright"
+  },
+  "118": {
+    "original_class_id": 148,
+    "TR": "onlar",
+    "EN": "they"
+  },
+  "119": {
+    "original_class_id": 149,
+    "TR": "orman",
+    "EN": "forest"
+  },
+  "120": {
+    "original_class_id": 150,
+    "TR": "oruc",
+    "EN": "fasting"
+  },
+  "121": {
+    "original_class_id": 151,
+    "TR": "ozur_dilemek",
+    "EN": "apologize"
+  },
+  "122": {
+    "original_class_id": 152,
+    "TR": "pamuk",
+    "EN": "cotton"
+  },
+  "123": {
+    "original_class_id": 153,
+    "TR": "pantolon",
+    "EN": "trousers"
+  },
+  "124": {
+    "original_class_id": 155,
+    "TR": "pastirma",
+    "EN": "pastrami"
+  },
+  "125": {
+    "original_class_id": 157,
+    "TR": "pazar",
+    "EN": "sunday"
+  },
+  "126": {
+    "original_class_id": 158,
+    "TR": "pazartesi",
+    "EN": "monday"
+  },
+  "127": {
+    "original_class_id": 159,
+    "TR": "pencere",
+    "EN": "window"
+  },
+  "128": {
+    "original_class_id": 160,
+    "TR": "persembe",
+    "EN": "thursday"
+  },
+  "129": {
+    "original_class_id": 161,
+    "TR": "piknik",
+    "EN": "picnic"
+  },
+  "130": {
+    "original_class_id": 162,
+    "TR": "polis",
+    "EN": "police"
+  },
+  "131": {
+    "original_class_id": 164,
+    "TR": "rica_etmek",
+    "EN": "request"
+  },
+  "132": {
+    "original_class_id": 166,
+    "TR": "sabun",
+    "EN": "soap"
+  },
+  "133": {
+    "original_class_id": 167,
+    "TR": "salca",
+    "EN": "sauce"
+  },
+  "134": {
+    "original_class_id": 168,
+    "TR": "sali",
+    "EN": "tuesday"
+  },
+  "135": {
+    "original_class_id": 169,
+    "TR": "sampiyon",
+    "EN": "champion"
+  },
+  "136": {
+    "original_class_id": 170,
+    "TR": "sapka",
+    "EN": "hat"
+  },
+  "137": {
+    "original_class_id": 171,
+    "TR": "savas",
+    "EN": "war"
+  },
+  "138": {
+    "original_class_id": 174,
+    "TR": "semsiye",
+    "EN": "umbrella"
+  },
+  "139": {
+    "original_class_id": 175,
+    "TR": "sen",
+    "EN": "you"
+  },
+  "140": {
+    "original_class_id": 176,
+    "TR": "senet",
+    "EN": "bill"
+  },
+  "141": {
+    "original_class_id": 177,
+    "TR": "serbest",
+    "EN": "free"
+  },
+  "142": {
+    "original_class_id": 178,
+    "TR": "ses",
+    "EN": "voice"
+  },
+  "143": {
+    "original_class_id": 179,
+    "TR": "sevmek",
+    "EN": "love"
+  },
+  "144": {
+    "original_class_id": 180,
+    "TR": "seytan",
+    "EN": "evil"
+  },
+  "145": {
+    "original_class_id": 181,
+    "TR": "sinir",
+    "EN": "border"
+  },
+  "146": {
+    "original_class_id": 182,
+    "TR": "siz",
+    "EN": "you"
+  },
+  "147": {
+    "original_class_id": 184,
+    "TR": "soz",
+    "EN": "promise"
+  },
+  "148": {
+    "original_class_id": 185,
+    "TR": "sut",
+    "EN": "milk"
+  },
+  "149": {
+    "original_class_id": 187,
+    "TR": "tarak",
+    "EN": "comb"
+  },
+  "150": {
+    "original_class_id": 188,
+    "TR": "tarih",
+    "EN": "date"
+  },
+  "151": {
+    "original_class_id": 189,
+    "TR": "tatil",
+    "EN": "holiday"
+  },
+  "152": {
+    "original_class_id": 190,
+    "TR": "tatli",
+    "EN": "sweet"
+  },
+  "153": {
+    "original_class_id": 191,
+    "TR": "tavan",
+    "EN": "ceiling"
+  },
+  "154": {
+    "original_class_id": 192,
+    "TR": "tehlike",
+    "EN": "danger"
+  },
+  "155": {
+    "original_class_id": 193,
+    "TR": "telefon",
+    "EN": "telephone"
+  },
+  "156": {
+    "original_class_id": 194,
+    "TR": "terazi",
+    "EN": "scales"
+  },
+  "157": {
+    "original_class_id": 195,
+    "TR": "terzi",
+    "EN": "tailor"
+  },
+  "158": {
+    "original_class_id": 196,
+    "TR": "tesekkur",
+    "EN": "thanks"
+  },
+  "159": {
+    "original_class_id": 197,
+    "TR": "tornavida",
+    "EN": "screwdriver"
+  },
+  "160": {
+    "original_class_id": 198,
+    "TR": "turkiye",
+    "EN": "turkey"
+  },
+  "161": {
+    "original_class_id": 199,
+    "TR": "turuncu",
+    "EN": "orange"
+  },
+  "162": {
+    "original_class_id": 200,
+    "TR": "tuvalet",
+    "EN": "toilet"
+  },
+  "163": {
+    "original_class_id": 201,
+    "TR": "un",
+    "EN": "flour"
+  },
+  "164": {
+    "original_class_id": 202,
+    "TR": "uzak",
+    "EN": "far"
+  },
+  "165": {
+    "original_class_id": 204,
+    "TR": "var",
+    "EN": "existing"
+  },
+  "166": {
+    "original_class_id": 205,
+    "TR": "vergi",
+    "EN": "tax"
+  },
+  "167": {
+    "original_class_id": 208,
+    "TR": "yanlis",
+    "EN": "wrong"
+  },
+  "168": {
+    "original_class_id": 209,
+    "TR": "yapmak",
+    "EN": "do"
+  },
+  "169": {
+    "original_class_id": 210,
+    "TR": "yarabandi",
+    "EN": "band-aid"
+  },
+  "170": {
+    "original_class_id": 211,
+    "TR": "yardim",
+    "EN": "help"
+  },
+  "171": {
+    "original_class_id": 212,
+    "TR": "yarin",
+    "EN": "tomorrow"
+  },
+  "172": {
+    "original_class_id": 213,
+    "TR": "yasak",
+    "EN": "forbidden"
+  },
+  "173": {
+    "original_class_id": 214,
+    "TR": "yastik",
+    "EN": "pillow"
+  },
+  "174": {
+    "original_class_id": 215,
+    "TR": "yatak",
+    "EN": "bed"
+  },
+  "175": {
+    "original_class_id": 216,
+    "TR": "yavas",
+    "EN": "slow"
+  },
+  "176": {
+    "original_class_id": 217,
+    "TR": "yemek",
+    "EN": "eat"
+  },
+  "177": {
+    "original_class_id": 218,
+    "TR": "yemek_pisirmek",
+    "EN": "cook"
+  },
+  "178": {
+    "original_class_id": 219,
+    "TR": "yildiz",
+    "EN": "star"
+  },
+  "179": {
+    "original_class_id": 220,
+    "TR": "yok",
+    "EN": "absent"
+  },
+  "180": {
+    "original_class_id": 222,
+    "TR": "yorgun",
+    "EN": "tired"
+  },
+  "181": {
+    "original_class_id": 223,
+    "TR": "yumurta",
+    "EN": "egg"
+  },
+  "182": {
+    "original_class_id": 224,
+    "TR": "zaman",
+    "EN": "time"
+  },
+  "183": {
+    "original_class_id": 225,
+    "TR": "zor",
+    "EN": "difficult"
+  }
+}

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signatürk</title>
+<style>
+:root {
+  --bg:#0f1117; --surface:#1a1d26; --surface2:#22263a;
+  --accent:#4f8ef7; --accent2:#7c3aed; --success:#22c55e;
+  --warning:#f59e0b; --danger:#ef4444; --text:#e2e8f0; --muted:#64748b; --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px;}
+h1{font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.subtitle{color:var(--muted);font-size:0.85rem;margin-bottom:24px;}
+.tabs{display:flex;gap:4px;background:var(--surface);border-radius:var(--radius);padding:4px;margin-bottom:20px;width:100%;max-width:1100px;}
+.tab-btn{flex:1;padding:10px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.tab-btn.active{background:var(--surface2);color:var(--text);}
+.tab-panel{display:none;width:100%;max-width:1100px;}
+.tab-panel.active{display:block;}
+.main-grid{display:grid;grid-template-columns:1fr 380px;gap:20px;width:100%;}
+.camera-section{position:relative;background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid #2d3148;}
+.camera-wrapper{position:relative;width:100%;padding-bottom:75%;}
+#videoElement{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:none;}
+#outputCanvas{position:absolute;top:0;left:0;width:100%;height:100%;transform:scaleX(-1);}
+.status-badge{position:absolute;top:12px;right:12px;padding:6px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;backdrop-filter:blur(8px);transition:all 0.3s;z-index:10;}
+.status-badge.idle{background:rgba(100,116,139,0.8);color:#94a3b8;}
+.status-badge.active{background:rgba(34,197,94,0.2);color:var(--success);border:1px solid var(--success);}
+.status-badge.thinking{background:rgba(79,142,247,0.2);color:var(--accent);border:1px solid var(--accent);}
+.progress-bar-wrapper{position:absolute;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.05);z-index:10;}
+#progressBar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.1s linear;}
+.results-section{display:flex;flex-direction:column;gap:16px;}
+.panel{background:var(--surface);border-radius:var(--radius);padding:20px;border:1px solid #2d3148;}
+.panel-title{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:16px;}
+.prediction-main{text-align:center;padding:16px 0;}
+#mainWord{font-size:2.8rem;font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:6px;min-height:3.2rem;transition:all 0.3s;}
+#mainWordEN{font-size:1rem;color:var(--muted);margin-bottom:12px;}
+.confidence-ring-wrapper{display:flex;justify-content:center;margin-bottom:8px;}
+.confidence-value{font-size:1.4rem;font-weight:700;color:var(--accent);}
+.top-k-list{display:flex;flex-direction:column;gap:8px;}
+.top-k-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface2);border-radius:8px;}
+.top-k-item.rank-1{border-left:3px solid var(--accent);}
+.top-k-item.rank-2{border-left:3px solid var(--accent2);opacity:0.85;}
+.top-k-item.rank-3{border-left:3px solid var(--muted);opacity:0.7;}
+.rank-badge{width:24px;height:24px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:var(--muted);flex-shrink:0;}
+.top-k-word{font-weight:600;flex:1;}
+.top-k-word span{display:block;font-size:0.75rem;color:var(--muted);font-weight:400;}
+.conf-bar-wrapper{width:80px;flex-shrink:0;}
+.conf-bar-bg{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;margin-bottom:3px;}
+.conf-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.4s ease;}
+.conf-text{font-size:0.7rem;color:var(--muted);text-align:right;}
+.history-list{display:flex;flex-wrap:wrap;gap:8px;max-height:140px;overflow-y:auto;}
+.history-chip{padding:4px 10px;background:var(--surface2);border-radius:20px;font-size:0.8rem;color:var(--text);border:1px solid #2d3148;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.stat-box{background:var(--surface2);border-radius:8px;padding:10px;text-align:center;}
+.stat-value{font-size:1.2rem;font-weight:700;color:var(--accent);}
+.stat-label{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+.conn-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--muted);}
+.conn-dot.connected{background:var(--success);box-shadow:0 0 6px var(--success);}
+.conn-dot.disconnected{background:var(--danger);}
+.low-conf-badge{display:none;background:rgba(245,158,11,0.15);color:var(--warning);border:1px solid var(--warning);border-radius:8px;padding:8px 12px;font-size:0.8rem;text-align:center;margin-top:8px;}
+@media(max-width:768px){.main-grid{grid-template-columns:1fr;}}
+.anim-layout{display:grid;grid-template-columns:1fr 300px;gap:20px;}
+.anim-viewport{background:var(--surface);border-radius:var(--radius);border:1px solid #2d3148;overflow:hidden;position:relative;aspect-ratio:4/3;min-height:520px;}
+#animCanvas{width:100%;height:100%;display:block;}
+.anim-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surface);color:var(--muted);font-size:0.85rem;gap:12px;}
+.spinner{width:32px;height:32px;border:3px solid #2d3148;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.anim-controls{display:flex;flex-direction:column;gap:14px;}
+.search-wrapper{position:relative;}
+.search-input{width:100%;padding:12px 16px;background:var(--surface2);border:1px solid #2d3148;border-radius:8px;color:var(--text);font-size:0.95rem;outline:none;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--muted);}
+.suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface2);border:1px solid #2d3148;border-radius:8px;max-height:200px;overflow-y:auto;z-index:100;display:none;}
+.suggestion-item{padding:10px 16px;cursor:pointer;font-size:0.9rem;transition:background 0.1s;}
+.suggestion-item:hover{background:var(--surface);}
+.play-btn{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;}
+.play-btn:hover{opacity:0.85;}
+.play-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.anim-status{padding:10px 14px;background:var(--surface2);border-radius:8px;font-size:0.82rem;color:var(--muted);min-height:40px;display:flex;align-items:center;}
+.anim-status.playing{color:var(--success);}
+.anim-status.error{color:var(--danger);}
+.playback-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface2);border-radius:8px;}
+.playback-bar button{background:none;border:none;color:var(--text);cursor:pointer;font-size:1.1rem;padding:4px 8px;border-radius:4px;}
+.playback-bar button:hover{background:var(--surface);}
+#timelineBar{flex:1;height:4px;background:#2d3148;border-radius:2px;overflow:hidden;}
+#timelineFill{height:100%;background:var(--accent);width:0%;}
+.word-list-panel{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid #2d3148;}
+.word-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-height:300px;overflow-y:auto;margin-top:10px;}
+.word-chip{padding:6px 8px;background:var(--surface2);border-radius:6px;font-size:0.75rem;text-align:center;cursor:pointer;border:1px solid transparent;transition:all 0.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.word-chip:hover{border-color:var(--accent);color:var(--accent);}
+.startup-overlay{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 35%,#1d2540 0%,#0f1117 55%,#090b12 100%);display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease;}
+.startup-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.startup-card{display:flex;flex-direction:column;align-items:center;gap:16px;padding:28px 24px;border:1px solid #2d3148;background:rgba(26,29,38,.75);backdrop-filter:blur(8px);border-radius:14px;min-width:320px;max-width:92vw;box-shadow:0 20px 70px rgba(0,0,0,.45);}
+.startup-gif{width:min(220px,60vw);aspect-ratio:1/1;position:relative;border-radius:12px;overflow:hidden;border:1px solid #2d3148;box-shadow:0 8px 26px rgba(0,0,0,.35);}
+.startup-gif img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;display:block;}
+.startup-title{font-size:1.3rem;font-weight:700;letter-spacing:.02em;}
+.startup-sub{font-size:.85rem;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+<div class="startup-overlay" id="startupOverlay">
+  <div class="startup-card">
+    <div class="startup-gif">
+      <img id="startupGifImg" src="/static/a.gif" alt="">
+    </div>
+    <div class="startup-title">Signatürk</div>
+    <div class="startup-sub" id="startupText">Tanıma ve animasyon modülleri hazırlanıyor...</div>
+  </div>
+</div>
+
+<h1>Signatürk</h1>
+<p class="subtitle">Tanıma ve animasyon sistemi</p>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('recognize',this)">Tanıma — Kameradan</button>
+  <button class="tab-btn"        onclick="switchTab('animate',this)">Animasyon — Kelimeden</button>
+</div>
+
+<!-- TANIM -->
+<div class="tab-panel active" id="tab-recognize">
+  <div class="main-grid">
+    <div class="camera-section">
+      <div class="camera-wrapper">
+        <video id="videoElement" autoplay muted playsinline></video>
+        <canvas id="outputCanvas"></canvas>
+        <div class="status-badge idle" id="statusBadge">Bekleniyor</div>
+        <div class="progress-bar-wrapper"><div id="progressBar"></div></div>
+      </div>
+    </div>
+    <div class="results-section">
+      <div class="panel" style="padding:12px 20px;">
+        <div style="display:flex;align-items:center;font-size:0.8rem;">
+          <span class="conn-dot" id="connDot"></span>
+          <span id="connStatus">Baglanıyor...</span>
+          <span style="margin-left:auto;color:var(--muted);font-size:0.7rem;" id="latencyText"></span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Tahmin</div>
+        <div class="prediction-main">
+          <div id="mainWord" style="color:var(--muted);">—</div>
+          <div id="mainWordEN" style="color:var(--muted);">El gösterin</div>
+          <div class="confidence-ring-wrapper"><div class="confidence-value" id="mainConf"></div></div>
+        </div>
+        <div class="low-conf-badge" id="lowConfBadge">Emin degilim — islaret tekrar deneyin</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Top 3 Tahmin</div>
+        <div class="top-k-list" id="topKList">
+          <div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:12px;">Henuz tahmin yok</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Istatistikler</div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Tahmin</div></div>
+          <div class="stat-box"><div class="stat-value" id="statAvgConf">—</div><div class="stat-label">Ort. Guven</div></div>
+          <div class="stat-box"><div class="stat-value" id="statLatency">—</div><div class="stat-label">ms</div></div>
+        </div>
+      </div>
+      <div class="panel" style="flex:1;">
+        <div class="panel-title" style="display:flex;justify-content:space-between;">
+          <span>Gecmis Tahminler</span>
+          <span onclick="clearHistory()" style="cursor:pointer;color:var(--muted);font-size:0.7rem;">Temizle</span>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANİMASYON -->
+<div class="tab-panel" id="tab-animate">
+  <div class="anim-layout">
+    <div class="anim-viewport">
+      <canvas id="animCanvas"></canvas>
+      <div class="anim-loading" id="animLoading">
+        <div class="spinner"></div>
+        <span>Hazirlaniyor...</span>
+      </div>
+    </div>
+    <div class="anim-controls">
+      <div class="panel" style="padding:16px;">
+        <div class="panel-title">Kelime veya Cumle Gir</div>
+        <div class="search-wrapper">
+          <input type="text" class="search-input" id="wordInput"
+            placeholder="orn: merhaba tesekkur..."
+            autocomplete="off" oninput="onSearchInput()" onkeydown="onSearchKey(event)">
+          <div class="suggestions" id="suggestions"></div>
+        </div>
+        <br>
+        <button class="play-btn" id="playBtn" onclick="playCurrentInput()" disabled>Animasyonu Goster</button>
+        <div class="anim-status" id="animStatus">Kelime girin ve animasyonu izleyin</div>
+      </div>
+      <div class="playback-bar">
+        <button onclick="togglePlay()" id="playPauseBtn">||</button>
+        <button onclick="restartAnim()">|&lt;</button>
+        <div id="timelineBar"><div id="timelineFill"></div></div>
+        <span style="font-size:0.75rem;color:var(--muted);" id="frameCounter">0/0</span>
+      </div>
+      <div class="word-list-panel">
+        <div class="panel-title">Tum Kelimeler</div>
+        <div class="word-grid" id="wordGrid"><div style="color:var(--muted);font-size:0.8rem;">Yukleniyor...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Tab ───────────────────────────────────────────
+async function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'recognize' && !LIBS.recognizerBooted) {
+    await bootRecognizer();
+  }
+  if (name === 'animate' && !ANIM.initialized) {
+    await ensureThreeLoaded();
+    initAnim();
+  }
+}
+
+// ── WebSocket + ML ────────────────────────────────
+var STATE = {
+  ws:null, connected:false, holistic:null, camera:null,
+  totalPredictions:0, totalConf:0,
+  handDetectedRecently:false, handLostTimer:null,
+  frameColor:new Array(126).fill(0),
+  zeroDepth:new Array(126).fill(0),
+};
+var LIBS = {
+  mediapipeLoaded:false,
+  mediapipeLoading:null,
+  threeLoaded:false,
+  threeLoading:null,
+  recognizerBooted:false
+};
+function delayMs(ms) {
+  return function(v) {
+    return new Promise(function(r){ setTimeout(function(){ r(v); }, ms); });
+  };
+}
+function nextFrame2() {
+  return new Promise(function(r){
+    requestAnimationFrame(function(){ requestAnimationFrame(r); });
+  });
+}
+var HAND_LOST_DELAY_MS = 300;
+var videoEl     = document.getElementById('videoElement');
+var canvas      = document.getElementById('outputCanvas');
+var ctx         = canvas.getContext('2d');
+var statusBadge = document.getElementById('statusBadge');
+var progressBar = document.getElementById('progressBar');
+var connDot     = document.getElementById('connDot');
+var connStatus  = document.getElementById('connStatus');
+var latencyText = document.getElementById('latencyText');
+var mainWord    = document.getElementById('mainWord');
+var mainWordEN  = document.getElementById('mainWordEN');
+var mainConf    = document.getElementById('mainConf');
+var topKList    = document.getElementById('topKList');
+var historyList = document.getElementById('historyList');
+var lowConfBadge= document.getElementById('lowConfBadge');
+var statTotal   = document.getElementById('statTotal');
+var statAvgConf = document.getElementById('statAvgConf');
+var statLatency = document.getElementById('statLatency');
+
+function connectWS() {
+  var wsProto=(window.location.protocol==='https:')?'wss://':'ws://';
+  STATE.ws = new WebSocket(wsProto+window.location.host+'/ws');
+  STATE.ws.onopen = function(){ STATE.connected=true; connDot.className='conn-dot connected'; connStatus.textContent='Bagli'; };
+  STATE.ws.onclose = function(){ STATE.connected=false; connDot.className='conn-dot disconnected'; connStatus.textContent='Baglanti kesildi...'; setTimeout(connectWS,2000); };
+  STATE.ws.onerror = function(e){ console.error('[WS]',e); };
+  STATE.ws.onmessage = function(evt){ handleServerMessage(JSON.parse(evt.data)); };
+}
+function sendToServer(obj) {
+  if (STATE.connected && STATE.ws && STATE.ws.readyState===WebSocket.OPEN) STATE.ws.send(JSON.stringify(obj));
+}
+function loadScriptOnce(src) {
+  return new Promise(function(resolve, reject){
+    var s = document.createElement('script');
+    s.src = src;
+    s.crossOrigin = 'anonymous';
+    s.async = true;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+function ensureMediaPipeLoaded() {
+  if (LIBS.mediapipeLoaded) return Promise.resolve();
+  if (LIBS.mediapipeLoading) return LIBS.mediapipeLoading;
+  // Script parse tek seferde ana iş parçacığını kilitliyor; kısa aralar Firefox'u nefes aldırır.
+  LIBS.mediapipeLoading = loadScriptOnce('https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5.1675471629/holistic.js')
+    .then(delayMs(120))
+    .then(function(){ return loadScriptOnce('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js'); })
+    .then(delayMs(120))
+    .then(function(){ return loadScriptOnce('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js'); })
+    .then(function(){ LIBS.mediapipeLoaded = true; });
+  return LIBS.mediapipeLoading;
+}
+function ensureThreeLoaded() {
+  if (window.THREE || LIBS.threeLoaded) return Promise.resolve();
+  if (LIBS.threeLoading) return LIBS.threeLoading;
+  LIBS.threeLoading = loadScriptOnce('https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js')
+    .then(function(){ LIBS.threeLoaded = true; });
+  return LIBS.threeLoading;
+}
+async function bootRecognizer() {
+  if (LIBS.recognizerBooted) return;
+  await ensureMediaPipeLoaded();
+  await nextFrame2();
+  initMediaPipe();
+  await new Promise(function(r){ setTimeout(r, 0); });
+  await startCamera();
+  LIBS.recognizerBooted = true;
+}
+function handleServerMessage(msg) {
+  if (msg.type==='idle'){ setStatus('idle','Bekleniyor'); progressBar.style.width='0%'; }
+  else if (msg.type==='collecting'){ setStatus('active','Toplaniyor '+msg.frames+'/16'); progressBar.style.width=(msg.progress*100)+'%'; }
+  else if (msg.type==='prediction'){ progressBar.style.width='0%'; setStatus('idle','Hazir'); displayPrediction(msg); latencyText.textContent=msg.latency_ms+' ms'; statLatency.textContent=msg.latency_ms; }
+}
+function setStatus(type,text){ statusBadge.className='status-badge '+type; statusBadge.textContent=text; }
+function displayPrediction(msg) {
+  var top1=msg.top_k[0], conf=top1.confidence, isLow=msg.status==='low_confidence';
+  mainWord.textContent=top1.TR; mainWord.style.color=isLow?'var(--warning)':'var(--text)';
+  mainWordEN.textContent=top1.EN; mainConf.textContent='%'+(conf*100).toFixed(1);
+  lowConfBadge.style.display=isLow?'block':'none';
+  topKList.innerHTML='';
+  msg.top_k.forEach(function(item,idx){
+    var div=document.createElement('div'); div.className='top-k-item rank-'+(idx+1);
+    div.innerHTML='<div class="rank-badge">'+(idx+1)+'</div><div class="top-k-word">'+item.TR+'<span>'+item.EN+'</span></div><div class="conf-bar-wrapper"><div class="conf-bar-bg"><div class="conf-bar-fill" style="width:'+(item.confidence*100)+'%"></div></div><div class="conf-text">%'+(item.confidence*100).toFixed(1)+'</div></div>';
+    topKList.appendChild(div);
+  });
+  STATE.totalPredictions++; STATE.totalConf+=conf;
+  statTotal.textContent=STATE.totalPredictions;
+  statAvgConf.textContent='%'+((STATE.totalConf/STATE.totalPredictions)*100).toFixed(0);
+  var chip=document.createElement('div'); chip.className='history-chip';
+  chip.style.borderColor=isLow?'var(--warning)':'#2d3148'; chip.textContent=top1.TR;
+  historyList.insertBefore(chip,historyList.firstChild);
+  while(historyList.children.length>30) historyList.removeChild(historyList.lastChild);
+}
+function clearHistory(){ historyList.innerHTML=''; STATE.totalPredictions=0; STATE.totalConf=0; statTotal.textContent='0'; statAvgConf.textContent='—'; }
+
+function initMediaPipe() {
+  STATE.holistic = new Holistic({ locateFile:function(f){ return 'https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5.1675471629/'+f; } });
+  STATE.holistic.setOptions({ modelComplexity:1,smoothLandmarks:true,enableSegmentation:false,smoothSegmentation:false,refineFaceLandmarks:false,minDetectionConfidence:0.5,minTrackingConfidence:0.5 });
+  STATE.holistic.onResults(function(results) {
+    canvas.width=results.image.width; canvas.height=results.image.height;
+    ctx.save(); ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(results.image,0,0,canvas.width,canvas.height);
+    if(results.poseLandmarks){ drawConnectors(ctx,results.poseLandmarks,POSE_CONNECTIONS,{color:'rgba(79,142,247,0.4)',lineWidth:2}); drawLandmarks(ctx,results.poseLandmarks,{color:'rgba(79,142,247,0.6)',lineWidth:1,radius:2}); }
+    if(results.leftHandLandmarks){ drawConnectors(ctx,results.leftHandLandmarks,HAND_CONNECTIONS,{color:'#22c55e',lineWidth:2}); drawLandmarks(ctx,results.leftHandLandmarks,{color:'#16a34a',lineWidth:1,radius:3}); }
+    if(results.rightHandLandmarks){ drawConnectors(ctx,results.rightHandLandmarks,HAND_CONNECTIONS,{color:'#4f8ef7',lineWidth:2}); drawLandmarks(ctx,results.rightHandLandmarks,{color:'#2563eb',lineWidth:1,radius:3}); }
+    ctx.restore();
+    var vec=STATE.frameColor, handDetected=false, offset=0;
+    vec.fill(0);
+    if(results.leftHandLandmarks){ results.leftHandLandmarks.forEach(function(lm){ vec[offset++]=lm.x; vec[offset++]=lm.y; vec[offset++]=lm.z; }); handDetected=true; } else offset+=63;
+    if(results.rightHandLandmarks){ results.rightHandLandmarks.forEach(function(lm){ vec[offset++]=lm.x; vec[offset++]=lm.y; vec[offset++]=lm.z; }); handDetected=true; }
+    if(handDetected){ if(STATE.handLostTimer){ clearTimeout(STATE.handLostTimer); STATE.handLostTimer=null; } STATE.handDetectedRecently=true; }
+    else if(STATE.handDetectedRecently&&!STATE.handLostTimer){ STATE.handLostTimer=setTimeout(function(){ STATE.handDetectedRecently=false; STATE.handLostTimer=null; },HAND_LOST_DELAY_MS); }
+    sendToServer({ type:'frame', color_landmarks:vec, depth_landmarks:STATE.zeroDepth, hand_detected:STATE.handDetectedRecently });
+  });
+}
+async function startCamera() {
+  try {
+    var stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:640},height:{ideal:480},facingMode:'user'}});
+    videoEl.srcObject=stream; videoEl.play();
+    STATE.camera=new Camera(videoEl,{ onFrame:async function(){ await STATE.holistic.send({image:videoEl}); }, width:640, height:480 });
+    await STATE.camera.start();
+  } catch(err){ console.error('[Camera]',err); connStatus.textContent='Kamera erisimi reddedildi!'; connDot.className='conn-dot disconnected'; }
+}
+
+// ── Animasyon — Stick Figure ──────────────────────
+var ANIM = {
+  initialized:false, renderer:null, scene:null, camera:null, clock:null,
+  playing:true, wordList:[],
+  queue:[], queueIdx:0, frameIdx:0, frameTimer:0,
+  FPS:20, TRANSITION_FRAMES:6,
+  bones:{}, joints:{},
+};
+
+// Pose bağlantıları (omuz-dirsek-bilek-govde)
+var POSE_CONN = [
+  ['11','13'],['13','15'],  // sol kol
+  ['12','14'],['14','16'],  // sag kol
+  ['11','12'],              // omuzlar
+  ['11','23'],['12','24'],  // govde
+  ['23','24'],              // kalca
+];
+// El bağlantıları
+var HAND_CONN = [
+  [0,1],[1,2],[2,3],[3,4],
+  [0,5],[5,6],[6,7],[7,8],
+  [0,9],[9,10],[10,11],[11,12],
+  [0,13],[13,14],[14,15],[15,16],
+  [0,17],[17,18],[18,19],[19,20],
+  [5,9],[9,13],[13,17],
+];
+
+var C = { body:0x4f8ef7, lhand:0x22c55e, rhand:0xf59e0b, joint:0xffffff };
+
+function mkCyl(color, r) {
+  return new THREE.Mesh(
+    new THREE.CylinderGeometry(r,r,1,6),
+    new THREE.MeshLambertMaterial({color:color})
+  );
+}
+function mkSph(color, r) {
+  return new THREE.Mesh(
+    new THREE.SphereGeometry(r,6,6),
+    new THREE.MeshLambertMaterial({color:color})
+  );
+}
+function placeBone(mesh, a, b) {
+  var dir=b.clone().sub(a), len=dir.length();
+  if(len<0.001){ mesh.visible=false; return; }
+  mesh.visible=true; mesh.scale.y=len;
+  mesh.position.copy(a.clone().add(b).multiplyScalar(0.5));
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
+}
+
+// Koordinat: pose normalize (0-1), merkezi 0'a al
+function p2v(arr) {
+  return new THREE.Vector3((arr[0]-0.5)*2, -(arr[1]-0.5)*2, -arr[2]*2);
+}
+// El: ham, bilek merkezli
+function h2v(arr) {
+  return new THREE.Vector3(arr[0], -arr[1], -arr[2]);
+}
+
+function drawFrame(fd) {
+  var pose=fd.pose||{}, lh=fd.left_hand, rh=fd.right_hand;
+
+  // Pose noktaları
+  Object.keys(pose).forEach(function(k){
+    var key='pj'+k;
+    if(!ANIM.joints[key]){ var r=k==='0'?0.13:0.012; var s=mkSph(C.joint,r); ANIM.scene.add(s); ANIM.joints[key]=s; }
+    ANIM.joints[key].position.copy(p2v(pose[k])); ANIM.joints[key].visible=true;
+  });
+  // Yuz detaylari (goz, agiz)
+var gozSol  = pose['2'], gozSag = pose['5'];
+var agizSol = pose['9'], agizSag = pose['10'];
+var burun   = pose['0'];
+
+// Govde dolgusu — omuzlar ile kalca arasinda iki ucgen
+var o11=pose['11'],o12=pose['12'],k23=pose['23'],k24=pose['24'];
+if(o11&&o12&&k23&&k24){
+  if(!ANIM.bones['torso1']){
+    var tg=new THREE.BufferGeometry();
+    ANIM.tg1=tg;
+    var tm=new THREE.Mesh(tg,new THREE.MeshLambertMaterial({color:0x1e3a5f,side:THREE.DoubleSide}));
+    ANIM.scene.add(tm); ANIM.bones['torso1']=tm;
+  }
+  var v1=p2v(o11),v2=p2v(o12),v3a=p2v(k23),v4=p2v(k24);
+  var pos=new Float32Array([
+    v1.x,v1.y,v1.z, v2.x,v2.y,v2.z, v3a.x,v3a.y,v3a.z,
+    v2.x,v2.y,v2.z, v4.x,v4.y,v4.z, v3a.x,v3a.y,v3a.z
+  ]);
+  ANIM.bones['torso1'].geometry.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  ANIM.bones['torso1'].geometry.computeVertexNormals();
+  ANIM.bones['torso1'].visible=true;
+}
+
+// Goz - sol
+if(gozSol){
+  var key='goz_sol';
+  if(!ANIM.joints[key]){ var s=mkSph(0x222244,0.018); ANIM.scene.add(s); ANIM.joints[key]=s; }
+  ANIM.joints[key].position.copy(p2v(gozSol)); ANIM.joints[key].visible=true;
+  // Goz beyazi
+  var key2='goz_sol_w';
+  if(!ANIM.joints[key2]){ var s2=mkSph(0xffffff,0.022); ANIM.scene.add(s2); ANIM.joints[key2]=s2; }
+  ANIM.joints[key2].position.copy(p2v(gozSol)); ANIM.joints[key2].visible=true;
+}
+if(gozSag){
+  var key='goz_sag';
+  if(!ANIM.joints[key]){ var s=mkSph(0x222244,0.018); ANIM.scene.add(s); ANIM.joints[key]=s; }
+  ANIM.joints[key].position.copy(p2v(gozSag)); ANIM.joints[key].visible=true;
+  var key2='goz_sag_w';
+  if(!ANIM.joints[key2]){ var s2=mkSph(0xffffff,0.022); ANIM.scene.add(s2); ANIM.joints[key2]=s2; }
+  ANIM.joints[key2].position.copy(p2v(gozSag)); ANIM.joints[key2].visible=true;
+}
+// Agiz
+if(agizSol&&agizSag){
+  var key='agiz';
+  if(!ANIM.bones[key]){ var m=mkCyl(0xcc4444,0.008); ANIM.scene.add(m); ANIM.bones[key]=m; }
+  placeBone(ANIM.bones[key],p2v(agizSol),p2v(agizSag));
+}
+  // Pose kemikleri
+  POSE_CONN.forEach(function(pr){
+    var key='pb'+pr[0]+'_'+pr[1];
+    if(!ANIM.bones[key]){ var m=mkCyl(C.body,0.018); ANIM.scene.add(m); ANIM.bones[key]=m; }
+    var a=pose[pr[0]],b=pose[pr[1]];
+    if(a&&b) placeBone(ANIM.bones[key],p2v(a),p2v(b));
+    else ANIM.bones[key].visible=false;
+  });
+
+  // Sol el
+  if(lh){
+    var wp=pose['15']?p2v(pose['15']):new THREE.Vector3(0,0,0);
+    var wh=h2v(lh[0]);
+    var off=wp.clone().sub(wh);
+    lh.forEach(function(pt,i){
+      var key='lhj'+i;
+      if(!ANIM.joints[key]){ var s=mkSph(C.joint,0.007); ANIM.scene.add(s); ANIM.joints[key]=s; }
+      ANIM.joints[key].position.copy(h2v(pt).add(off)); ANIM.joints[key].visible=true;
+    });
+    HAND_CONN.forEach(function(pr){
+      var key='lhb'+pr[0]+'_'+pr[1];
+      if(!ANIM.bones[key]){ var m=mkCyl(C.lhand,0.007); ANIM.scene.add(m); ANIM.bones[key]=m; }
+      placeBone(ANIM.bones[key],h2v(lh[pr[0]]).add(off),h2v(lh[pr[1]]).add(off));
+    });
+  } else {
+    Object.keys(ANIM.joints).forEach(function(k){ if(k.startsWith('lhj')) ANIM.joints[k].visible=false; });
+    Object.keys(ANIM.bones).forEach(function(k){ if(k.startsWith('lhb')) ANIM.bones[k].visible=false; });
+  }
+
+  // Sağ el
+  if(rh){
+    var wp2=pose['16']?p2v(pose['16']):new THREE.Vector3(0,0,0);
+    var wh2=h2v(rh[0]);
+    var off2=wp2.clone().sub(wh2);
+    rh.forEach(function(pt,i){
+      var key='rhj'+i;
+      if(!ANIM.joints[key]){ var s=mkSph(C.joint,0.007); ANIM.scene.add(s); ANIM.joints[key]=s; }
+      ANIM.joints[key].position.copy(h2v(pt).add(off2)); ANIM.joints[key].visible=true;
+    });
+    HAND_CONN.forEach(function(pr){
+      var key='rhb'+pr[0]+'_'+pr[1];
+      if(!ANIM.bones[key]){ var m=mkCyl(C.rhand,0.007); ANIM.scene.add(m); ANIM.bones[key]=m; }
+      placeBone(ANIM.bones[key],h2v(rh[pr[0]]).add(off2),h2v(rh[pr[1]]).add(off2));
+    });
+  } else {
+    Object.keys(ANIM.joints).forEach(function(k){ if(k.startsWith('rhj')) ANIM.joints[k].visible=false; });
+    Object.keys(ANIM.bones).forEach(function(k){ if(k.startsWith('rhb')) ANIM.bones[k].visible=false; });
+  }
+}
+
+function lerpA(a,b,t){ if(!a||!b) return a||b; return [a[0]*(1-t)+b[0]*t,a[1]*(1-t)+b[1]*t,a[2]*(1-t)+b[2]*t]; }
+function lerpFrame(fa,fb,t){
+  if(!fa) return fb; if(!fb) return fa;
+  var r={pose:{},left_hand:null,right_hand:null};
+  var keys={}; Object.keys(fa.pose||{}).forEach(function(k){keys[k]=1;}); Object.keys(fb.pose||{}).forEach(function(k){keys[k]=1;});
+  Object.keys(keys).forEach(function(k){ r.pose[k]=lerpA((fa.pose||{})[k],(fb.pose||{})[k],t)||((fa.pose||{})[k])||((fb.pose||{})[k]); });
+  if(fa.left_hand&&fb.left_hand) r.left_hand=fa.left_hand.map(function(p,i){return lerpA(p,fb.left_hand[i],t);}); else r.left_hand=fa.left_hand||fb.left_hand;
+  if(fa.right_hand&&fb.right_hand) r.right_hand=fa.right_hand.map(function(p,i){return lerpA(p,fb.right_hand[i],t);}); else r.right_hand=fa.right_hand||fb.right_hand;
+  return r;
+}
+
+function initAnim() {
+  ANIM.initialized=true;
+  if (!window.THREE) {
+    setAnimStatus('Three.js yüklenemedi','error');
+    return;
+  }
+  var c=document.getElementById('animCanvas');
+  var w=c.clientWidth||700, h=c.clientHeight||525;
+  ANIM.renderer=new THREE.WebGLRenderer({canvas:c,antialias:true});
+  ANIM.renderer.setSize(w,h,false);
+  ANIM.renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  ANIM.scene=new THREE.Scene();
+  ANIM.scene.background=new THREE.Color(0x0f1117);
+  ANIM.scene.add(new THREE.AmbientLight(0xffffff,1.0));
+  var dir=new THREE.DirectionalLight(0xffffff,0.5); dir.position.set(5,10,5); ANIM.scene.add(dir);
+  ANIM.camera=new THREE.PerspectiveCamera(90,w/h,0.01,100);
+  ANIM.camera.position.set(0.2, 0.0, 2.5);
+  ANIM.camera.lookAt(0, 0, 0);
+  //ANIM.scene.add(new THREE.GridHelper(2,10,0x2d3148,0x2d3148));
+  ANIM.clock=new THREE.Clock();
+  fetch('/signs').then(function(r){return r.json();}).then(function(data){
+    ANIM.wordList=data.words; buildWordGrid(data.words);
+    document.getElementById('animLoading').style.display='none';
+    setAnimStatus('Hazir. Kelime girin.','');
+  });
+  window.addEventListener('resize',function(){
+    var c2=document.getElementById('animCanvas');
+    ANIM.camera.aspect=c2.clientWidth/c2.clientHeight;
+    ANIM.camera.updateProjectionMatrix();
+    ANIM.renderer.setSize(c2.clientWidth,c2.clientHeight,false);
+  });
+  animLoop();
+}
+
+function animLoop(){
+  requestAnimationFrame(animLoop);
+  var delta=ANIM.clock.getDelta();
+  if(ANIM.playing&&ANIM.queue.length>0){
+    ANIM.frameTimer+=delta;
+    if(ANIM.frameTimer>=1/ANIM.FPS){
+      ANIM.frameTimer-=1/ANIM.FPS;
+      var item=ANIM.queue[ANIM.queueIdx], frames=item.frames, total=frames.length;
+      var isLast=ANIM.queueIdx===ANIM.queue.length-1, left=total-ANIM.frameIdx;
+      var fd=frames[ANIM.frameIdx];
+      if(!isLast&&left<=ANIM.TRANSITION_FRAMES){
+        var t=1-(left/ANIM.TRANSITION_FRAMES);
+        fd=lerpFrame(fd,ANIM.queue[ANIM.queueIdx+1].frames[0],t);
+      }
+      drawFrame(fd);
+      var totalF=ANIM.queue.reduce(function(s,r){return s+r.frames.length;},0);
+      var doneF=ANIM.queue.slice(0,ANIM.queueIdx).reduce(function(s,r){return s+r.frames.length;},0);
+      document.getElementById('timelineFill').style.width=((doneF+ANIM.frameIdx)/totalF*100)+'%';
+      document.getElementById('frameCounter').textContent=(doneF+ANIM.frameIdx)+'/'+totalF;
+      ANIM.frameIdx++;
+      if(ANIM.frameIdx>=total){
+        if(!isLast){ ANIM.queueIdx++; ANIM.frameIdx=0; }
+        else{ ANIM.frameIdx=total-1; setAnimStatus('Tamamlandi: '+ANIM.queue.map(function(r){return r.word;}).join(' > '),'playing'); }
+      }
+    }
+  }
+  if(ANIM.renderer) ANIM.renderer.render(ANIM.scene,ANIM.camera);
+}
+
+async function playSentence(text){
+  if(!ANIM.initialized) return;
+  var words=text.trim().toLowerCase().replace(/[,;]/g,' ').split(/\s+/).filter(function(w){return w.length>0;});
+  if(!words.length) return;
+  setAnimStatus('Yukleniyor...','');
+  document.getElementById('playBtn').disabled=true;
+  var results=await Promise.all(words.map(async function(word){
+    try{ var res=await fetch('/landmark/'+encodeURIComponent(word)); if(!res.ok) return {word:word,frames:null}; var d=await res.json(); return {word:word,frames:d.frames}; }
+    catch(e){ return {word:word,frames:null}; }
+  }));
+  ANIM.queue=results.filter(function(r){return r.frames&&r.frames.length>0;});
+  var missing=results.filter(function(r){return !r.frames;}).map(function(r){return r.word;});
+  if(missing.length) console.warn('Bulunamayan:',missing.join(', '));
+  if(!ANIM.queue.length){ setAnimStatus('Bulunamadi: '+words.join(', '),'error'); document.getElementById('playBtn').disabled=false; return; }
+  ANIM.queueIdx=0; ANIM.frameIdx=0; ANIM.frameTimer=0; ANIM.playing=true;
+  document.getElementById('playPauseBtn').textContent='||';
+  setAnimStatus('Oynatiyor: '+ANIM.queue.map(function(r){return r.word;}).join(' > '),'playing');
+  document.getElementById('playBtn').disabled=false;
+}
+function playCurrentInput(){ var t=document.getElementById('wordInput').value.trim(); if(t) playSentence(t); }
+function togglePlay(){ ANIM.playing=!ANIM.playing; document.getElementById('playPauseBtn').textContent=ANIM.playing?'||':'>'; }
+function restartAnim(){ ANIM.queueIdx=0; ANIM.frameIdx=0; ANIM.frameTimer=0; ANIM.playing=true; document.getElementById('playPauseBtn').textContent='||'; }
+function setAnimStatus(t,c){ var el=document.getElementById('animStatus'); el.textContent=t; el.className='anim-status'+(c?' '+c:''); }
+
+function onSearchInput(){
+  var q=document.getElementById('wordInput').value, last=q.trim().toLowerCase().split(/\s+/).pop();
+  var sb=document.getElementById('suggestions');
+  document.getElementById('playBtn').disabled=q.trim().length===0;
+  if(last.length<1){ sb.style.display='none'; return; }
+  var m=ANIM.wordList.filter(function(w){return w.startsWith(last);}).slice(0,8);
+  if(!m.length){ sb.style.display='none'; return; }
+  sb.innerHTML=m.map(function(w){return '<div class="suggestion-item" onclick="appendWord(\''+w+'\')">'+w+'</div>';}).join('');
+  sb.style.display='block';
+}
+function appendWord(word){
+  var inp=document.getElementById('wordInput'), parts=inp.value.trim().split(/\s+/);
+  parts[parts.length-1]=word; inp.value=parts.join(' ')+' ';
+  document.getElementById('suggestions').style.display='none';
+  document.getElementById('playBtn').disabled=false; inp.focus();
+}
+function onSearchKey(e){
+  if(e.key==='Enter'){ document.getElementById('suggestions').style.display='none'; playCurrentInput(); }
+  if(e.key==='Escape') document.getElementById('suggestions').style.display='none';
+}
+function selectWord(w){ document.getElementById('wordInput').value=w; document.getElementById('suggestions').style.display='none'; document.getElementById('playBtn').disabled=false; playSentence(w); }
+function buildWordGrid(words){
+  document.getElementById('wordGrid').innerHTML=words.map(function(w){return '<div class="word-chip" onclick="selectWord(\''+w+'\')" title="'+w+'">'+w+'</div>';}).join('');
+}
+document.addEventListener('click',function(e){ if(!e.target.closest('.search-wrapper')) document.getElementById('suggestions').style.display='none'; });
+
+// ── Startup Overlay + Chime ───────────────────────
+function playStartupChime() {
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return Promise.resolve();
+  var ac = new AudioCtx();
+  if (ac.state === 'suspended') {
+    return ac.resume().then(function(){ return renderChime(ac); });
+  }
+  return renderChime(ac);
+}
+
+function renderChime(ac) {
+  var now = ac.currentTime + 0.02;
+  var master = ac.createGain();
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.exponentialRampToValueAtTime(0.18, now + 0.03);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + 1.7);
+  master.connect(ac.destination);
+
+  [523.25, 659.25, 783.99].forEach(function(freq, i){
+    var o = ac.createOscillator();
+    var g = ac.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, now + i * 0.02);
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.12 / (i + 1), now + 0.06 + i * 0.03);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 1.35 + i * 0.08);
+    o.connect(g).connect(master);
+    o.start(now + i * 0.02);
+    o.stop(now + 1.45 + i * 0.08);
+  });
+  return new Promise(function(resolve){ setTimeout(resolve, 220); });
+}
+
+var startupChimePlayed = false;
+function attemptStartupChime() {
+  if (startupChimePlayed) return Promise.resolve();
+  return playStartupChime()
+    .then(function(){ startupChimePlayed = true; })
+    .catch(function(){ /* autoplay policy: sessizce yoksay */ });
+}
+
+function initStartupOverlay() {
+  var overlay = document.getElementById('startupOverlay');
+  var txt = document.getElementById('startupText');
+  var loadingTexts = [
+    'Animasyonlar yükleniyor...',
+    'Model bağlantısı kuruluyor...',
+    'Kamera ve algılama modülü hazırlanıyor...',
+    'Arayüz bileşenleri optimize ediliyor...'
+  ];
+  var textIdx = 0;
+  var textTimer = setInterval(function(){
+    textIdx = (textIdx + 1) % loadingTexts.length;
+    txt.textContent = loadingTexts[textIdx];
+  }, 1100);
+  function closeOverlay() {
+    clearInterval(textTimer);
+    txt.textContent = 'Başlatılıyor...';
+    overlay.classList.add('hidden');
+  }
+
+  fetch('/startup-check').then(function(r){ return r.json(); }).then(function(data){
+    if (data && data.model_loaded) {
+      txt.textContent = 'Backend hazır, modüller yükleniyor...';
+    }
+  }).catch(function(){});
+
+  connectWS();
+
+  // Ağır iş (script + WASM + kamera) splash sırasında: ana ekran açılınca Firefox uyarısı tetiklenmesin.
+  var bootPromise = new Promise(function(resolve){
+    setTimeout(function(){
+      ensureMediaPipeLoaded()
+        .then(function(){ return bootRecognizer(); })
+        .then(resolve)
+        .catch(function(e){ console.error(e); resolve(); });
+    }, 200);
+  });
+  var bootCapped = Promise.race([
+    bootPromise,
+    new Promise(function(r){ setTimeout(r, 45000); })
+  ]);
+  var minSplashMs = 10000;
+  var minSplashPromise = new Promise(function(r){ setTimeout(r, minSplashMs); });
+
+  // Hem en az 10 sn göster, hem tanıma (mümkünse) hazır olsun; çok yavaşsa en fazla ~45 sn bekle.
+  Promise.all([bootCapped, minSplashPromise]).then(function(){
+    attemptStartupChime().finally(function(){
+      closeOverlay();
+      if (!startupChimePlayed) {
+        var once = function(){
+          attemptStartupChime();
+          document.removeEventListener('pointerdown', once, true);
+        };
+        document.addEventListener('pointerdown', once, true);
+      }
+    });
+  });
+}
+
+// ── Başlat ────────────────────────────────────────
+(async function(){
+  initStartupOverlay();
+})();
+</script>
+</body>
+</html>
