@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  tsl-demo:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./model_assets:/app/model_assets
+      - ./dataset/landmarks:/app/dataset/landmarks
+    environment:
+      - TF_CPP_MIN_LOG_LEVEL=3
+    restart: unless-stopped
